@@ -1,0 +1,10 @@
+.bugzilla_link {
+  text-decoration: none;
+  color: rgb(117, 117, 117);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.bugzilla_link:hover {
+  color: rgb(32, 32, 32);
+}
