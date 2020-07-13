@@ -31,7 +31,7 @@ function addBugzillaLink(url) {
 
 function getBugzillaUrl(target) {
   const bugzillaInfo = target.querySelector(
-    ".nH.if .ii.gt > div > div > pre:last-of-type"
+    ".nH.if .ii.gt > div > div pre:last-of-type"
   );
   if (bugzillaInfo && bugzillaInfo.textContent) {
     const data = bugzillaInfo.textContent;
