@@ -33,12 +33,38 @@ function getBugzillaUrl(target) {
   if (emailBody) {
     const content = emailBody.textContent;
     if (content) {
+      // Try to find the Bugzilla headers in the email body
+      // This needs 'Include X-Bugzilla- headers in BugMail body' enabled
       const matchUrl = content.match(/X-Bugzilla-URL: (https?:\/\/.*?\/)/);
       const matchId = content.match(/X-Bugzilla-ID: (\d+)/);
       if (matchUrl && matchId) {
         return `${matchUrl[1]}show_bug.cgi?id=${matchId[1]}`;
+      } else {
+        // Fall back to parsing the whole email body
+        const matchBody = content.match(
+          /https?:\/\/.*?\/show_bug\.cgi\?id=\d+/
+        );
+        if (matchBody) {
+          return matchBody;
+        }
       }
-      return content.match(/https?:\/\/.*?\/show_bug\.cgi\?id=\d+/);
+    }
+
+    // If there is no email body (for example in sec-bugs with a key set),
+    // all back to parsing the sender and subject
+    const subject = document.querySelector("div.AO .hP");
+    const sender = document.querySelector("div.AO .go");
+    if (
+      subject &&
+      sender &&
+      subject.textContent &&
+      sender.textContent &&
+      sender.textContent === "<bugzilla-daemon@mozilla.org>"
+    ) {
+      const matchId = subject.textContent.match(/^\[Bug (\d+)\]/);
+      if (matchId) {
+        return `https://bugzilla.mozilla.org/show_bug.cgi?id=${matchId[1]}`;
+      }
     }
   }
 }
