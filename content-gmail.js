@@ -21,7 +21,6 @@ function addBugzillaLink(url) {
   const link = document.createElement("a");
   link.href = url;
   link.className = "bugzilla_link T-I-ax7";
-  //   link.className = "bugzilla_link T-I J-J5-Ji lS T-I-ax7 ar7";
   link.target = "_blank";
   link.rel = "noopener";
   link.innerText = "View on Bugzilla";
@@ -30,21 +29,17 @@ function addBugzillaLink(url) {
 }
 
 function getBugzillaUrl(target) {
-  const bugzillaInfo = target.querySelector(
-    ".nH.if .ii.gt > div > div pre:last-of-type"
-  );
-  if (bugzillaInfo && bugzillaInfo.textContent) {
-    const data = bugzillaInfo.textContent;
-    const bugzillaUrl = data.match(/X-Bugzilla-URL: (https?:\/\/.*?)$/)[1];
-    const bugzillaId = data.match(/X-Bugzilla-ID: (\d+)/)[1];
-    if (bugzillaUrl && bugzillaId) {
-      return `${bugzillaUrl}show_bug.cgi?id=${bugzillaId}`;
-    }
-  }
-
   const emailBody = target.querySelector(".nH.if .ii.gt > div");
-  if (emailBody && emailBody.textContent) {
-    return emailBody.textContent.match(/https?:\/\/.*?\/show_bug\.cgi\?id=\d+/);
+  if (emailBody) {
+    const content = emailBody.textContent;
+    if (content) {
+      const matchUrl = content.match(/X-Bugzilla-URL: (https?:\/\/.*?\/)/);
+      const matchId = content.match(/X-Bugzilla-ID: (\d+)/);
+      if (matchUrl && matchId) {
+        return `${matchUrl[1]}show_bug.cgi?id=${matchId[1]}`;
+      }
+      return content.match(/https?:\/\/.*?\/show_bug\.cgi\?id=\d+/);
+    }
   }
 }
 

@@ -2,7 +2,7 @@
   text-decoration: none;
   color: rgb(117, 117, 117);
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .bugzilla_link:hover {
